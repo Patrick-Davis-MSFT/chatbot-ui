@@ -11,6 +11,8 @@ import { useCreateReducer } from '@/hooks/useCreateReducer';
 import useErrorService from '@/services/errorService';
 import useApiService from '@/services/useApiService';
 
+import { APP_TITLE, APP_DESCRIPTION } from '@/utils/app/const';
+
 import {
   cleanConversationHistory,
   cleanSelectedConversation,
@@ -73,6 +75,9 @@ const Home = ({
     },
     dispatch,
   } = contextValue;
+
+  const chatTitle =  APP_TITLE;
+  const chatDescription = APP_DESCRIPTION;
 
   const stopConversationRef = useRef<boolean>(false);
 
@@ -360,8 +365,8 @@ const Home = ({
       }}
     >
       <Head>
-        <title>Gov Chat</title>
-        <meta name="description" content="ChatGPT but better." />
+        <title>{chatTitle}</title>
+        <meta name="description" content="{chatDescription}" />
         <meta
           name="viewport"
           content="height=device-height ,width=device-width, initial-scale=1, user-scalable=no"
@@ -383,7 +388,7 @@ const Home = ({
             <Chatbar />
 
             <div className="flex flex-1">
-              <Chat stopConversationRef={stopConversationRef} />
+              <Chat stopConversationRef={stopConversationRef}  title={chatTitle} description={chatDescription}/>
             </div>
 
           </div>
