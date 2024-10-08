@@ -44,8 +44,14 @@ export const OpenAIStream = async (
   //let token = getCache("cachedToken");
   //console.log("auth token:",token); 
   //let token = process.env.AUTH_TOKEN ? JSON.parse(process.env.AUTH_TOKEN) : '';
-  let token = await getAuthToken();
-  console.log("auth token:",token); 
+  let token = null;
+  try{
+    token = await getAuthToken();
+    console.log("auth token:",token); 
+  }
+  catch(e){
+    console.log("Error getting token: ", e);
+  }
 
   const header = {
     'Content-Type': 'application/json',
@@ -55,7 +61,7 @@ export const OpenAIStream = async (
     ...(OPENAI_API_TYPE === 'azure' && process.env.AZURE_USE_MANAGED_IDENTITY=="false" && {
       'api-key': `${key ? key : process.env.OPENAI_API_KEY}`
     }),
-    ...(OPENAI_API_TYPE === 'azure' && process.env.AZURE_USE_MANAGED_IDENTITY=="true" && {
+    ...(OPENAI_API_TYPE === 'azure' && process.env.AZURE_USE_MANAGED_IDENTITY=="true" &&  token?.token && {
       Authorization: `Bearer ${token.token}`
     }),
     ...((OPENAI_API_TYPE === 'openai' && OPENAI_ORGANIZATION) && {
